@@ -1,0 +1,1276 @@
+:root {
+  /* 面板底色用 RGB 三分量而不是成品色，好让外观 JS 只改一个 alpha 就能调浓淡 */
+  --bg-rgb: 26, 26, 30;
+  --bg-alpha: 0.88;
+  --bg-image: none;
+  --bg-blur: 0px;
+  --bg-dim: 0;
+  /* 「暗化」层的颜色。深色主题盖黑，浅色主题必须盖白：
+     浅色主题的文字是黑的，往黑里压只会越压越看不清 */
+  --dim-rgb: 0, 0, 0;
+
+  --bg-raise: rgba(255, 255, 255, 0.06);
+  --bg-hover: rgba(255, 255, 255, 0.09);
+  --bg-active: rgba(255, 255, 255, 0.14);
+  --line: rgba(255, 255, 255, 0.1);
+  --text: #e9e9ec;
+  --dim: #9a9aa4;
+  --accent: #4c8dff;
+  --danger: #ff6b6b;
+
+  /* 浮层（右键菜单 / 设置面板 / 对话框）用**实心**底色，不跟主面板一起半透明：
+     它们要盖在桌面和其他窗口上，再透一层就会把字看清的余量用完 */
+  --surface: #26262c;
+  --scrim: rgba(0, 0, 0, 0.5);
+  /* 输入框 / 内嵌列表这类「凹陷区」靠一层比底色更暗的膜表达，浅色主题反过来要更亮 */
+  --field-bg: rgba(0, 0, 0, 0.35);
+  --well-bg: rgba(0, 0, 0, 0.22);
+  --toast-bg: rgba(20, 20, 24, 0.95);
+  /* accent / danger 这类饱和底上的字，两套主题都用白 */
+  --on-accent: #ffffff;
+  --disabled: #6a6a74;
+  --danger-text: #ffc9c9;
+  --danger-bg: rgba(255, 107, 107, 0.14);
+  --danger-line: rgba(255, 107, 107, 0.4);
+  --sel-bg: rgba(76, 141, 255, 0.26);
+  --drop-bg: rgba(94, 201, 139, 0.26);
+  --drop-line: rgba(94, 201, 139, 0.7);
+  --scroll-thumb: rgba(255, 255, 255, 0.16);
+  --scroll-thumb-hover: rgba(255, 255, 255, 0.28);
+  --shadow-menu: 0 14px 34px rgba(0, 0, 0, 0.55);
+  --shadow-panel: 0 20px 44px rgba(0, 0, 0, 0.6);
+  --shadow-toast: 0 10px 28px rgba(0, 0, 0, 0.5);
+
+  /* 文件卡片（列表区的网格单元）。
+     卡片底色很淡、描边也很淡：4×2 共 8 个卡片如果都描一圈实边，
+     面板会被切成八个方块；但完全不给底色又看不出是卡片，所以取一个刚够读出矩形的量 */
+  --card-bg: rgba(255, 255, 255, 0.055);
+  --card-bg-hover: rgba(255, 255, 255, 0.11);
+  --card-line: rgba(255, 255, 255, 0.08);
+  --card-line-hover: rgba(255, 255, 255, 0.16);
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --sel-line: rgba(76, 141, 255, 0.55);
+  --sel-glow: rgba(76, 141, 255, 0.16);
+
+  /* 以下六项（加上 --ui-font）由 src/lib/appearance.ts 的 sizeVars() 按用户字号推导后覆写。
+     这里的初值只是为了「样式单独打开也不塌」，不是真实取值。 */
+  --ui-font: "Microsoft YaHei UI", "Segoe UI", system-ui, sans-serif;
+  --fs: 13px;
+  --bar-h: 42px;
+  --tab-h: 28px;
+  --status-h: 26px;
+  --card-gap: 6px;
+  --icon-size: 18px;
+
+  color-scheme: dark;
+}
+
+/* 浅色主题只换颜色，尺寸与布局完全共用，不给两套主题各维护一份几何 */
+[data-theme="light"] {
+  --bg-rgb: 250, 250, 252;
+  --dim-rgb: 255, 255, 255;
+  --bg-raise: rgba(0, 0, 0, 0.04);
+  --bg-hover: rgba(0, 0, 0, 0.06);
+  --bg-active: rgba(0, 0, 0, 0.1);
+  --line: rgba(0, 0, 0, 0.12);
+  --text: #1c1c1e;
+  --dim: #6b6b73;
+  --accent: #2563eb;
+  --danger: #d92d20;
+
+  /* 浅色主题的浮层是一块**真白**：白底黑字对比度天然够，
+     不像深色主题那样需要靠阴影和描边把浮层从背景里「抬」出来 */
+  --surface: #ffffff;
+  --scrim: rgba(28, 28, 30, 0.28);
+  --field-bg: rgba(0, 0, 0, 0.05);
+  --well-bg: rgba(0, 0, 0, 0.035);
+  --toast-bg: rgba(255, 255, 255, 0.97);
+  --on-accent: #ffffff;
+  --disabled: #a5a5ad;
+  --danger-text: #b42318;
+  --danger-bg: rgba(217, 45, 32, 0.08);
+  --danger-line: rgba(217, 45, 32, 0.28);
+  --sel-bg: rgba(37, 99, 235, 0.18);
+  --drop-bg: rgba(21, 128, 61, 0.16);
+  --drop-line: rgba(21, 128, 61, 0.55);
+  --scroll-thumb: rgba(0, 0, 0, 0.22);
+  --scroll-thumb-hover: rgba(0, 0, 0, 0.34);
+  --shadow-menu: 0 14px 34px rgba(0, 0, 0, 0.18);
+  --shadow-panel: 0 20px 44px rgba(0, 0, 0, 0.22);
+  --shadow-toast: 0 10px 28px rgba(0, 0, 0, 0.16);
+
+  /* 浅色底上的卡片靠白底 + 淡描边表达，阴影比深色主题浅得多（深色那套在白底上会很脏） */
+  --card-bg: rgba(255, 255, 255, 0.62);
+  --card-bg-hover: #ffffff;
+  --card-line: rgba(0, 0, 0, 0.06);
+  --card-line-hover: rgba(0, 0, 0, 0.14);
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --sel-line: rgba(37, 99, 235, 0.45);
+  --sel-glow: rgba(37, 99, 235, 0.12);
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--ui-font);
+  font-size: var(--fs);
+  line-height: 1.5;
+  color: var(--text);
+  /* 切主题/字体时颜色平滑过渡，而不是硬切一下。
+     `font-family` 故意不放进过渡：字体过渡在 Windows 上会先闪一下系统默认字体 */
+  transition: color 200ms ease;
+  /* 面板里点选文件不该出现蓝色选区和拖拽幽灵图 */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.app {
+  position: relative;
+  /* 建立层叠上下文，好让下面 .backdrop 的 z-index:-1 关在面板里，
+     不会掉到 webview 的透明根节点后面去 */
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: rgba(var(--bg-rgb), var(--bg-alpha));
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  /* 只动 transform/opacity：这两个属性不触发重排，是滑出面板唯一能保住 60fps 的写法。
+     动画只在元素**被重新挂载**时才跑 —— 面板是 hide/show 而不是卸载，
+     所以每次弹出靠 React 换 key 重建这个元素来重放（见 App.tsx 的 runId）。 */
+  will-change: transform, opacity;
+  animation: panel-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 220ms ease, border-color 220ms ease;
+}
+
+/* 收起：等动画放完再由前端调 hide_window。`forwards` 是必须的，
+   否则动画一结束就弹回不透明，看起来像闪了一下才消失。 */
+.app.closing {
+  animation: panel-out 150ms cubic-bezier(0.4, 0, 1, 1) forwards;
+  pointer-events: none;
+}
+
+/*
+ * 背景图层。单独一层绝对定位，因为 `filter: blur()` 只能作用于整个元素 ——
+ * 想只模糊背景图而不模糊上面的文件名，就必须把它拆成独立一层。
+ *
+ * 放在 z-index:-1 是刻意的：它会盖在 .app 自己的底色之上、所有子元素之下，
+ * 所以不需要给每个子元素补 z-index。
+ */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  filter: blur(var(--bg-blur));
+  /* 图片被模糊后四边会往里透出底色，放大一点把虚边推到面板外面 */
+  transform: scale(1.08);
+  /* 和面板底色共用同一个 alpha，「面板不透明度」才是一句话说得清的一个数 */
+  opacity: var(--bg-alpha);
+  pointer-events: none;
+}
+
+/* 暗化层：亮照片上白字看不清时，用户把「暗化」滑杆拉大就能救回来 */
+.backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--dim-rgb), var(--bg-dim));
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 与 panel-in 对称：原路缩回顶部。方向不能反 —— 面板是从顶边掉下来的，
+   收回时往别处飞会显得像换了个人在动。 */
+@keyframes panel-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.985);
+  }
+}
+
+/* ------------------------------- 顶栏 ------------------------------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--bar-h);
+  padding: 0 8px;
+  border-bottom: 1px solid var(--line);
+  flex: none;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.crumbs::-webkit-scrollbar {
+  display: none;
+}
+
+/* 只在滚动后渐隐左边缘（见 Breadcrumb.tsx 的 scrolled 状态） */
+.crumbs.scrolled {
+  mask-image: linear-gradient(to right, transparent 0, #000 20px);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 20px);
+}
+
+.crumb-item {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.crumb-sep {
+  color: var(--dim);
+  padding: 0 2px;
+}
+
+.crumb {
+  border: 0;
+  background: none;
+  color: var(--dim);
+  font: inherit;
+  padding: 3px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crumb:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.crumb.current {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.icon-btn {
+  border: 0;
+  background: none;
+  color: var(--dim);
+  font: inherit;
+  font-size: calc(var(--fs) * 1.08);
+  line-height: 1;
+  width: calc(var(--fs) * 2.15);
+  height: calc(var(--fs) * 2.15);
+  border-radius: 7px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex: none;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.icon-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.icon-btn.on {
+  color: var(--accent);
+  background: var(--bg-active);
+}
+
+.icon-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ------------------------------ 工作空间 ------------------------------ */
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  flex: none;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  height: var(--tab-h);
+  border-radius: 8px;
+  background: var(--bg-raise);
+  flex: none;
+  overflow: hidden;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.tab.active {
+  background: var(--bg-active);
+  box-shadow: inset 0 0 0 1px var(--sel-line);
+}
+
+.tab-name {
+  border: 0;
+  background: none;
+  color: var(--dim);
+  font: inherit;
+  padding: 4px 4px 4px 10px;
+  cursor: pointer;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab.active .tab-name {
+  color: var(--text);
+}
+
+.tab-close {
+  border: 0;
+  background: none;
+  color: var(--dim);
+  font-size: 11px;
+  padding: 4px 8px 4px 4px;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.tab:hover .tab-close {
+  opacity: 1;
+}
+
+.tab-close:hover {
+  color: var(--danger);
+}
+
+.tab-input {
+  width: 110px;
+  margin: 2px 6px;
+  padding: 2px 6px;
+  font: inherit;
+  color: var(--text);
+  background: var(--field-bg);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  outline: none;
+}
+
+.tab-add {
+  border: 0;
+  background: none;
+  color: var(--dim);
+  font: inherit;
+  font-size: 15px;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  cursor: pointer;
+  flex: none;
+}
+
+.tab-add:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+/* ------------------------------- 提示条 ------------------------------- */
+
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 6px 8px 0;
+  padding: 7px 8px 7px 10px;
+  border-radius: 8px;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-line);
+  color: var(--danger-text);
+  flex: none;
+}
+
+.banner pre {
+  margin: 0;
+  font: inherit;
+  white-space: pre-wrap;
+  word-break: break-all;
+  flex: 1;
+  max-height: 84px;
+  overflow: auto;
+}
+
+.banner .icon-btn {
+  color: var(--danger-text);
+}
+
+/* ---------------------------- Ctrl+F 名字筛选 ---------------------------- */
+
+/* 高度跟着字号走（和顶栏/标签栏同一套规则），不另加 CSS 变量：只用在这一处 */
+.filterbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: calc(var(--fs) * 2.4);
+  padding: 0 6px 0 10px;
+  border-bottom: 1px solid var(--line);
+  background: var(--field-bg);
+  animation: filter-in 140ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filter-icon {
+  color: var(--dim);
+  font-size: calc(var(--fs) * 1.1);
+  line-height: 1;
+}
+
+.filter-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--fs);
+  outline: none;
+}
+
+.filter-input::placeholder {
+  color: var(--dim);
+}
+
+@keyframes filter-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ------------------------------ 文件卡片网格 ------------------------------ */
+
+.filelist {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 8px 8px;
+  display: grid;
+  /* 固定 4 列：用户要的是「一屏 8 个」。这是全文件唯一一处不跟着字号变的尺寸 ——
+     固定列数比「字号一大就少一列」好预测。 */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* 行高由容器高度反推，而不是写一个固定值：
+     两行加中间的行距正好等于容器高度，于是**第 3 行落在可视区之外**，
+     永远不会只露出半个卡片（写固定值时卡底就会挂一条被切开的边）。 */
+  grid-auto-rows: calc((100% - var(--card-gap)) / 2);
+  gap: var(--card-gap);
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  min-width: 0;
+  padding: 5px 8px;
+  border: 1px solid var(--card-line);
+  border-radius: 10px;
+  background: var(--card-bg);
+  /* 关键：卡片行高是算出来的，字号调到上限时内容会刚好溢出。
+     不裁掉的话溢出的半行字会被下一行的卡片盖住，看起来像字体渲染坏了 */
+  overflow: hidden;
+  cursor: default;
+  /* backwards 而不是 both：动画结束后不保留填充态，不然下面 :hover 的 transform
+     会被动画的 to 状态永久压住，鼠标悬停就没浮起反馈了 */
+  animation: card-in 240ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: calc(var(--card-index, 0) * 14ms);
+  transition: background-color 130ms ease, border-color 130ms ease, transform 130ms ease,
+    box-shadow 130ms ease;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.card:hover {
+  background: var(--card-bg-hover);
+  border-color: var(--card-line-hover);
+  /* 浮起 1px + 一层软阴影：卡片本身没有硬边框，靠这点位移和阴影表达「可点」 */
+  transform: translateY(-1px);
+  box-shadow: var(--card-shadow);
+}
+
+.card-selected,
+.card-selected:hover {
+  background: var(--sel-bg);
+  border-color: var(--sel-line);
+  /* 外发光而不是内描边：内描边会紧贴图标，看起来像图标自带了一圈框 */
+  box-shadow: 0 0 0 3px var(--sel-glow);
+}
+
+.card-drop {
+  background: var(--drop-bg);
+  border-color: var(--drop-line);
+}
+
+.card-hidden {
+  opacity: 0.5;
+}
+
+.card-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: calc(var(--fs) * 0.92);
+  /* 1.2 而不是 1.5：行高是本块里少数会直接吃掉「文章区」高度的参数，
+     放大字号时先溢出的一定是它 */
+  line-height: 1.2;
+}
+
+/* 卡片只放得下一行小字，所以正文显示大小（文件夹显示「文件夹」），
+   修改时间挪到悬停提示里，不为了腾地方把信息丢掉 */
+.card-meta {
+  color: var(--dim);
+  font-size: calc(var(--fs) * 0.78);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 空状态横跨整行，不然它会被当成第一个卡片挤在左上角的第一格里 */
+.filelist > .empty {
+  grid-column: 1 / -1;
+}
+
+.icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  flex: none;
+}
+
+.icon-folder {
+  color: #f0b45f;
+}
+.icon-image {
+  color: #5ec98b;
+}
+.icon-video {
+  color: #b98cff;
+}
+.icon-audio {
+  color: #ff8fc7;
+}
+.icon-archive {
+  color: #f5a25f;
+}
+.icon-code {
+  color: #5fd0e0;
+}
+.icon-exe {
+  color: #7aa2ff;
+}
+.icon-pdf {
+  color: #ff7070;
+}
+.icon-doc {
+  color: #79a7ff;
+}
+.icon-sheet {
+  color: #5ec98b;
+}
+.icon-slide {
+  color: #f5a25f;
+}
+.icon-text {
+  color: #9aa4b2;
+}
+.icon-file {
+  color: #8a8f99;
+}
+
+/*
+ * 上面 12 组颜色是照深色底挑的浅彩色。同样的值放到白底上会「发飘」，
+ * 亮黄、浅灰这两个最明显。所以浅色主题单独收一档明度 —— 只换颜色，形状和尺寸共用。
+ */
+[data-theme="light"] .icon-folder {
+  color: #b87503;
+}
+[data-theme="light"] .icon-image,
+[data-theme="light"] .icon-sheet {
+  color: #1f8a4c;
+}
+[data-theme="light"] .icon-video {
+  color: #7c4ddb;
+}
+[data-theme="light"] .icon-audio {
+  color: #d6408f;
+}
+[data-theme="light"] .icon-archive,
+[data-theme="light"] .icon-slide {
+  color: #c26a1a;
+}
+[data-theme="light"] .icon-code {
+  color: #1a8fa8;
+}
+[data-theme="light"] .icon-exe,
+[data-theme="light"] .icon-doc {
+  color: #2f6fe0;
+}
+[data-theme="light"] .icon-pdf {
+  color: #d92d20;
+}
+[data-theme="light"] .icon-text {
+  color: #5c6472;
+}
+[data-theme="light"] .icon-file {
+  color: #7a828e;
+}
+
+.empty {
+  color: var(--dim);
+  text-align: center;
+  margin: 36px 16px;
+}
+
+.empty.small {
+  margin: 8px;
+  font-size: 12px;
+}
+
+/* ------------------------------- 状态栏 ------------------------------- */
+
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--status-h);
+  padding: 0 12px;
+  border-top: 1px solid var(--line);
+  color: var(--dim);
+  font-size: calc(var(--fs) * 0.92);
+  flex: none;
+}
+
+.statusbar .spacer {
+  margin-left: auto;
+}
+
+.statusbar .ellipsis {
+  color: var(--text);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusbar .mark {
+  color: var(--accent);
+}
+
+/* ------------------------------ 右键菜单 ------------------------------ */
+
+.menu {
+  position: fixed;
+  z-index: 30;
+  min-width: 190px;
+  padding: 5px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  box-shadow: var(--shadow-menu);
+  /* 面板只有 270px 高，字号放大时整个菜单会超出窗口被切掉。
+     条目本身已收紧（见 .menu-item 的 padding），这里只是兜底。 */
+  max-height: calc(100vh - 12px);
+  overflow-y: auto;
+}
+
+.menu-sep {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--line);
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.menu-item:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.menu-item:disabled {
+  color: var(--disabled);
+  cursor: default;
+}
+
+.menu-item.danger {
+  color: var(--danger);
+}
+
+.menu-item.danger:hover {
+  background: var(--danger);
+  color: var(--on-accent);
+}
+
+/* -------------------------------- 浮层 -------------------------------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: var(--scrim);
+  border-radius: 12px;
+}
+
+.panel {
+  width: min(520px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  box-shadow: var(--shadow-panel);
+}
+
+.panel.confirm {
+  width: min(360px, calc(100% - 32px));
+  gap: 8px;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-head h2 {
+  margin: 0;
+  font-size: calc(var(--fs) * 1.08);
+  font-weight: 600;
+}
+
+.panel-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.field > span {
+  font-size: calc(var(--fs) * 0.92);
+  color: var(--text);
+}
+
+.field small {
+  color: var(--dim);
+  font-size: 11px;
+}
+
+.field.switch {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 2px 8px;
+  cursor: pointer;
+}
+
+.field.switch input {
+  grid-row: span 2;
+  width: 15px;
+  height: 15px;
+  accent-color: var(--accent);
+}
+
+.field.switch small {
+  grid-column: 2;
+}
+
+.field input[type="text"],
+.field input:not([type]),
+.field input[type="range"],
+.hotkey,
+.field input {
+  font: inherit;
+  color: var(--text);
+  background: var(--field-bg);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 6px 9px;
+  outline: none;
+}
+
+.field input:focus {
+  border-color: var(--accent);
+}
+
+.field input[type="range"] {
+  padding: 0;
+  background: none;
+  border: 0;
+  accent-color: var(--accent);
+}
+
+.field input[type="checkbox"] {
+  background: none;
+  border: 0;
+  padding: 0;
+  accent-color: var(--accent);
+}
+
+.hotkey {
+  cursor: pointer;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  font: inherit;
+  font-size: calc(var(--fs) * 0.92);
+  color: var(--text);
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.chip:hover {
+  background: var(--bg-hover);
+}
+
+.chip.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.browse {
+  max-height: 132px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 4px;
+  background: var(--well-bg);
+}
+
+.browse-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.browse-item:hover {
+  background: var(--bg-hover);
+}
+
+.btn {
+  font: inherit;
+  border-radius: 7px;
+  padding: 6px 16px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn.primary:hover {
+  filter: brightness(1.1);
+}
+
+.btn.ghost {
+  background: none;
+  border-color: var(--line);
+  color: var(--text);
+}
+
+.btn.ghost:hover {
+  background: var(--bg-hover);
+}
+
+.btn.danger {
+  background: var(--danger);
+  color: var(--on-accent);
+}
+
+.confirm-text {
+  margin: 4px 2px 8px;
+  line-height: 1.7;
+}
+
+.error {
+  color: var(--danger);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  /* 关键帧里自己写全 translate(-50%, …)，基础值不能省，否则动画结束后toast会偏右半格 */
+  transform: translateX(-50%);
+  z-index: 50;
+  padding: 7px 16px;
+  background: var(--toast-bg);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: calc(var(--fs) * 0.92);
+  box-shadow: var(--shadow-toast);
+  pointer-events: none;
+  animation: toast-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ------------------------------ 滚动条 ------------------------------ */
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 9px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-thumb-hover);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ------------------------------ 设置面板 ------------------------------ */
+
+.panel.settings {
+  width: 460px;
+  /* 设置项多，允许面板内部滚动；上限留一点缝，免得贴到屏幕上下边 */
+  max-height: 84vh;
+  overflow-y: auto;
+}
+
+.panel.image-picker {
+  width: 540px;
+  max-height: 84vh;
+  overflow-y: auto;
+}
+
+.section {
+  margin: 12px 0 2px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: calc(var(--fs) * 0.92);
+  font-weight: 600;
+  color: var(--dim);
+  letter-spacing: 0.04em;
+}
+
+/* 第一个分组紧跟在标题下面，不需要再拉一条分隔线 */
+.panel-head ~ .section:first-of-type {
+  margin-top: 2px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 主题切换：两段并排的分段控件，比下拉框少一次点击 */
+.segmented {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--bg-raise);
+  border-radius: 8px;
+}
+
+.seg {
+  border: 0;
+  background: none;
+  color: var(--dim);
+  font: inherit;
+  padding: 5px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 130ms ease, color 130ms ease;
+}
+
+.seg:hover {
+  color: var(--text);
+}
+
+.seg.active {
+  background: var(--bg-active);
+  color: var(--text);
+}
+
+.font-select {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+/* 下拉框的展开列表是系统绘制的独立弹层，拿不到 `.app` 上的继承值，
+   所以这里取 `:root` 的变量（自定义属性本身可继承，能穿透到 option） */
+.font-select option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.font-preview {
+  margin: 0;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: var(--bg-raise);
+  border: 1px dashed var(--line);
+  font-size: calc(var(--fs) * 1.15);
+  color: var(--text);
+}
+
+.bg-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.bg-preview {
+  width: 104px;
+  height: 62px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-raise);
+  overflow: hidden;
+}
+
+.bg-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bg-actions {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.row-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.btn.tiny {
+  padding: 4px 10px;
+  font-size: calc(var(--fs) * 0.92);
+}
+
+/* 键盘快捷键输入框：只读，只是拿来按键的，所以给它一个「可以按」的外观 */
+.hotkey {
+  text-align: center;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.path-bar {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.path-bar .btn {
+  flex: none;
+}
+
+.chips {
+  flex-wrap: wrap;
+}
+
+.browse.thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 6px;
+  max-height: 220px;
+}
+
+.thumb {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-raise);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 130ms ease, border-color 130ms ease;
+}
+
+.thumb:hover {
+  transform: translateY(-2px);
+  border-color: var(--dim);
+}
+
+.thumb.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.thumb img {
+  display: block;
+  width: 100%;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 5px;
+  background: var(--bg-active);
+}
+
+.thumb span {
+  font-size: calc(var(--fs) * 0.78);
+  color: var(--dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ------------------------------ 动效开关 ------------------------------ */
+
+/*
+ * 系统里开了「减少动态效果」就把所有进场动画和过渡关掉。
+ * 只关时长不删规则：删掉规则会让 `.card` 的 animation-delay 失效而元素正常显示，
+ * 看起来没差别；但如果哪天有人给动画加了 `fill: both`，删规则就会让行整块不显示。
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

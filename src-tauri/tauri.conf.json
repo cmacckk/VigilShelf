@@ -1,0 +1,60 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "VigilShelf",
+  "version": "0.5.0",
+  "identifier": "com.mechrevo.vigilshelf",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "VigilShelf",
+        "width": 560,
+        "height": 270,
+        "resizable": false,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "visible": false,
+        "shadow": false
+      }
+    ],
+    "security": {
+      "csp": null,
+      "assetProtocol": {
+        "enable": true,
+        "scope": [
+          "**/*.jpg",
+          "**/*.jpeg",
+          "**/*.png",
+          "**/*.webp",
+          "**/*.bmp",
+          "**/*.gif",
+          "**/*.avif",
+          "**/*.JPG",
+          "**/*.JPEG",
+          "**/*.PNG",
+          "**/*.WEBP",
+          "**/*.BMP"
+        ]
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

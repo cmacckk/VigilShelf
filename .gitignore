@@ -1,0 +1,28 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 演示目录里需要一个真可执行文件才能拍出「exe 用自己的图标」，
+# 但 Windows 系统二进制不进仓库 —— 重拍截图时从 C:\Windows\System32 拷一个过来
+docs/demo/notepad.exe

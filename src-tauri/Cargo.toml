@@ -1,0 +1,41 @@
+[package]
+name = "vigilshelf"
+version = "0.5.0"
+description = "VigilShelf - Windows 版 Folder Hub：鼠标移到屏幕顶部边缘即滑出的文件浏览器"
+authors = ["Mechrevo"]
+edition = "2024"
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "vigilshelf_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "protocol-asset"] }
+tauri-plugin-opener = "2"
+tauri-plugin-global-shortcut = "2"
+# 把文件从窗口里拖到外部程序（记事本 / 微信 / 资源管理器）。Tauri 2 内核没有这个能力，需要它。
+drag = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+trash = "5"
+clipboard-win = "5"
+dirs = "6"
+chrono = "0.4"
+uuid = { version = "1", features = ["v4"] }
+file_icon_provider = "1.0.2"
+base64 = "0.23.1"
+png = "0.18.1"
+
+# Read the optimization guideline for more details: https://tauri.app/concept/size/#cargo-configuration
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true
