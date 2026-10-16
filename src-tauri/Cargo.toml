@@ -2,7 +2,8 @@
 name = "vigilshelf"
 version = "0.5.0"
 description = "VigilShelf - Windows 版 Folder Hub：鼠标移到屏幕顶部边缘即滑出的文件浏览器"
-authors = ["Mechrevo"]
+authors = ["cmacckk"]
+license = "MIT"
 edition = "2024"
 
 [lib]

@@ -305,3 +305,13 @@ pnpm tauri build --bundles nsis
 - 背景图只支持常见位图格式，且路径会被写进设置文件；移动或删除该图片后面板会回到纯色底，不会报错。
 - 面板不支持拖动，也不支持调整大小（尺寸是代码常量 `window_ctl::PANEL_WIDTH` / `PANEL_HEIGHT`，
   不再来自设置）。字号在 11–16 之间改动时，可见卡片数保持不变（始终 4 列 × 2 行）。
+
+---
+
+## 许可证
+
+[MIT](LICENSE) © 2026 cmacckk
+
+第三方依赖的许可证：`tauri` / `serde` / `chrono` / `uuid` / `png` / `base64` / `dirs` 为 MIT OR
+Apache-2.0，`react` / `react-dom` / `vite` / `file_icon_provider` / `trash` 为 MIT，`clipboard-win`
+为 BSL-1.0，`typescript` 为 Apache-2.0 —— **无 GPL/AGPL**，不构成传染。
